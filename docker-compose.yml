@@ -1,0 +1,72 @@
+services:
+  frontend:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    container_name: syomei_frontend
+    ports:
+      - "3000:3000"
+    volumes:
+      - "./frontend/:/workspace/"
+    environment:
+      - env_var=env_value
+    command: sh -c "npm install && npm run dev"
+
+  storybook:
+    build:
+      context: ./frontend/
+      dockerfile: Dockerfile
+    container_name: syomei_storybook
+    ports:
+      - "6006:6006"
+    volumes:
+      - "./frontend/:/workspace/"
+    environment:
+      - env_var=env_value
+    command: sh -c "npm install && npm run storybook -- --ci"
+
+  api:
+    build:
+      context: ./api/
+      dockerfile: Dockerfile
+    container_name: syomei_api
+    ports:
+      - "8080:8080"
+    volumes:
+      - "./api/:/go/src/github.com/sg3t41/syomei_api"
+    command: sh -c "air"
+
+  db:
+    build:
+      context: ./db/
+      dockerfile: Dockerfile
+    container_name: syomei_db
+    ports:
+      - "5432:5432"
+    volumes:
+      - "pgdata:/var/lib/postgresql/data"
+
+  pgadmin:
+    image: dpage/pgadmin4
+    container_name: pgadmin
+    ports:
+      - "5050:80"
+    environment:
+      PGADMIN_DEFAULT_EMAIL: "sg3t41@example.com"
+      PGADMIN_DEFAULT_PASSWORD: "password"
+    depends_on:
+      - db
+
+  devenv:
+    build:
+      context: ./devenv/
+      dockerfile: Dockerfile
+    container_name: devenv
+    volumes:
+      - "./frontend/:/workspace/frontend/"
+      - "./api/:/workspace/api/"
+    tty: true
+    stdin_open: true
+
+volumes:
+  pgdata:
