@@ -6,12 +6,13 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/sg3t41/syomei_api/pkg/setting"
 
 	_ "github.com/lib/pq"
 )
 
-func init(){
-	 
+func init() {
+	setting.Setup()
 }
 
 type User struct {
