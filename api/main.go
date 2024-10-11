@@ -6,21 +6,25 @@ import (
 
 	"github.com/gin-contrib/cors"
 	"github.com/gin-gonic/gin"
+	"github.com/sg3t41/syomei_api/models"
 	"github.com/sg3t41/syomei_api/pkg/setting"
+	"github.com/sg3t41/syomei_api/pkg/util"
 
 	_ "github.com/lib/pq"
 )
 
 func init() {
 	setting.Setup()
+	util.Setup()
+	models.Setup()
 }
 
 type User struct {
-	ID           int
-	Username     string
-	Email        string
-	PasswordHash string
-	CreatedAt    string
+	ID           int    `json:"id"`
+	Username     string `json:"username"`
+	Email        string `json:"email"`
+	PasswordHash string `json:"password_hash"`
+	CreatedAt    string `json:"created_at"`
 }
 
 func main() {

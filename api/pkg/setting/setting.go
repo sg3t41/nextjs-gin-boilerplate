@@ -46,6 +46,7 @@ type Database struct {
 	Host        string
 	Name        string
 	TablePrefix string
+	Port        string
 }
 
 var DatabaseSetting = &Database{}
@@ -64,9 +65,9 @@ var cfg *ini.File
 
 func Setup() {
 	var err error
-	cfg, err = ini.Load("conf/app.ini")
+	cfg, err = ini.Load("conf/app.example.ini")
 	if err != nil {
-		log.Fatalf("setting.Setup, fail to parse 'conf/app.test.ini': %v", err)
+		log.Fatalf("setting.Setup, fail to parse 'conf/app.ini': %v", err)
 	}
 
 	mapTo("app", AppSetting)
