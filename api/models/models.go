@@ -14,10 +14,10 @@ var db *sql.DB
 
 // Model : DBレコードに共通するフィールド
 type Model struct {
-	ID         int `json:"id"`
-	CreatedAt  int `json:"created_at"`
-	ModifiedAt int `json:"modified_at"`
-	DeletedAt  int `json:"deleted_at"`
+	ID        int `json:"id"`
+	CreatedAt int `json:"created_at"`
+	UpdatedAt int `json:"updated_at"`
+	DeletedAt int `json:"deleted_at"`
 }
 
 // Setup : データベースのセットアップ関数
@@ -54,19 +54,20 @@ func CloseDB() {
 
 // CreateRecord : 新しいレコードを作成する関数
 func CreateRecord(query string, args ...interface{}) (int64, error) {
-	nowTime := time.Now().Unix()
-	args = append(args, nowTime, nowTime) // CreatedOnとModifiedOn用
-	result, err := db.Exec(query, args...)
+	var lastInsertId int64
+	nowTime := time.Now().Format("2006-01-02 15:04:05")
+	args = append(args, nowTime, nowTime) // CreatedAtとUpdatedAt用
+	err := db.QueryRow(query+" RETURNING id", args...).Scan(&lastInsertId)
 	if err != nil {
 		return 0, err
 	}
-	return result.LastInsertId()
+	return lastInsertId, nil
 }
 
 // UpdateRecord : レコードを更新する関数
 func UpdateRecord(query string, args ...interface{}) (int64, error) {
-	nowTime := time.Now().Unix()
-	args = append(args, nowTime) // ModifiedOn用
+	nowTime := time.Now().Format("2006-01-02 15:04:05")
+	args = append(args, nowTime) // UpdatedAt用
 	result, err := db.Exec(query, args...)
 	if err != nil {
 		return 0, err
@@ -76,11 +77,12 @@ func UpdateRecord(query string, args ...interface{}) (int64, error) {
 
 // SoftDeleteRecord : レコードをソフトデリートする関数
 func SoftDeleteRecord(query string, args ...interface{}) (int64, error) {
-	nowTime := time.Now().Unix()
-	args = append(args, nowTime) // DeletedOn用
+	nowTime := time.Now().Format("2006-01-02 15:04:05")
+	args = append(args, nowTime) // DeletedAt用
 	result, err := db.Exec(query, args...)
 	if err != nil {
 		return 0, err
 	}
 	return result.RowsAffected()
 }
+

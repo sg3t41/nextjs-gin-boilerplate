@@ -50,6 +50,16 @@ func main() {
 		})
 	})
 
+	r.GET("/post", func(c *gin.Context) {
+		id, err := models.CreatePost(1, "title", "内容")
+		if err != nil {
+			fmt.Println(err)
+		}
+		c.JSON(200, gin.H{
+			"result": id,
+		})
+	})
+
 	r.Run() // 0.0.0.0:8080
 	connectDB()
 }
