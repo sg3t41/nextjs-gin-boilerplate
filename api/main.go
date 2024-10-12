@@ -38,20 +38,18 @@ func main() {
 		// AllowHeaders:     []string{"Origin", "Content-Type"}, // 許可するヘッダー
 	}))
 
-	r.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "testだ22よ",
-		})
-	})
-
-	r.GET("/db", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"data": connectDB(),
-		})
-	})
-
 	r.GET("/post", func(c *gin.Context) {
 		id, err := models.CreatePost(1, "title", "内容")
+		if err != nil {
+			fmt.Println(err)
+		}
+		c.JSON(200, gin.H{
+			"result": id,
+		})
+	})
+
+	r.GET("/user", func(c *gin.Context) {
+		id, err := models.CreateUser("testuser", "testuser@gmail.com", "testpasswordhash")
 		if err != nil {
 			fmt.Println(err)
 		}
