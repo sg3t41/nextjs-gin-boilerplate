@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/sg3t41/syomei_api/pkg/setting"
+	"github.com/sg3t41/syomei_api/config"
 )
 
 var DB *sql.DB
@@ -24,13 +24,13 @@ type Model struct {
 func Setup() {
 	var err error
 	dsn := fmt.Sprintf("host=%s port=%s user=%s password=%s dbname=%s sslmode=disable",
-		setting.DatabaseSetting.Host,
-		setting.DatabaseSetting.Port,
-		setting.DatabaseSetting.User,
-		setting.DatabaseSetting.Password,
-		setting.DatabaseSetting.Name)
+		config.DatabaseSetting.Host,
+		config.DatabaseSetting.Port,
+		config.DatabaseSetting.User,
+		config.DatabaseSetting.Password,
+		config.DatabaseSetting.Name)
 
-	DB, err = sql.Open(setting.DatabaseSetting.Type, dsn)
+	DB, err = sql.Open(config.DatabaseSetting.Type, dsn)
 	if err != nil {
 		log.Fatalf("models.Setup err: %v", err)
 	}
@@ -56,7 +56,7 @@ func CloseDB() {
 func CreateRecord(query string, args ...interface{}) (int64, error) {
 	var lastInsertId int64
 	nowTime := time.Now()
-	args = append(args, nowTime, nowTime) // CreatedAtとUpdatedAt用
+	args = append(args, nowTime, nowTime)
 	err := DB.QueryRow(query+" RETURNING id", args...).Scan(&lastInsertId)
 	if err != nil {
 		return 0, err
@@ -67,7 +67,7 @@ func CreateRecord(query string, args ...interface{}) (int64, error) {
 // UpdateRecord : レコードを更新する関数
 func UpdateRecord(query string, args ...interface{}) (int64, error) {
 	nowTime := time.Now()
-	args = append(args, nowTime) // UpdatedAt用
+	args = append(args, nowTime)
 	result, err := DB.Exec(query, args...)
 	if err != nil {
 		return 0, err
@@ -78,7 +78,7 @@ func UpdateRecord(query string, args ...interface{}) (int64, error) {
 // SoftDeleteRecord : レコードをソフトデリートする関数
 func SoftDeleteRecord(query string, args ...interface{}) (int64, error) {
 	nowTime := time.Now()
-	args = append(args, nowTime) // DeletedAt用
+	args = append(args, nowTime)
 	result, err := DB.Exec(query, args...)
 	if err != nil {
 		return 0, err

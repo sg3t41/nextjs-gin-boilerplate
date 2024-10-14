@@ -14,7 +14,7 @@ type Post struct {
 }
 
 // CreatePost : 新しいPostレコードを作成する関数
-func CreatePost(userID int, title, content string) (int64, error) {
+func Create(userID int, title, content string) (int64, error) {
 	query := "INSERT INTO posts (user_id, title, content, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)"
 	id, err := model.CreateRecord(query, userID, title, content)
 	if err != nil {
@@ -24,7 +24,7 @@ func CreatePost(userID int, title, content string) (int64, error) {
 }
 
 // UpdatePost : 既存のPostレコードを更新する関数
-func UpdatePost(id int, title, content string) (int64, error) {
+func Update(id int, title, content string) (int64, error) {
 	query := "UPDATE posts SET title = $1, content = $2, updated_at = $3 WHERE id = $4"
 	rows, err := model.UpdateRecord(query, title, content, id)
 	if err != nil {
@@ -34,7 +34,7 @@ func UpdatePost(id int, title, content string) (int64, error) {
 }
 
 // SoftDeletePost : Postレコードをソフトデリートする関数
-func SoftDeletePost(id int) (int64, error) {
+func SoftDelete(id int) (int64, error) {
 	query := "UPDATE posts SET deleted_at = $1 WHERE id = $2"
 	rows, err := model.SoftDeleteRecord(query, id)
 	if err != nil {
@@ -64,7 +64,7 @@ func GetPosts(limit, offset int) ([]Post, error) {
 	return posts, rows.Err()
 }
 
-func GetPostByID(id int) (*Post, error) {
+func GetByID(id int) (*Post, error) {
 	query := "SELECT id, title, content, created_at, updated_at, deleted_at FROM posts WHERE id = $1 AND deleted_at IS NULL"
 	row := model.DB.QueryRow(query, id)
 
@@ -77,7 +77,7 @@ func GetPostByID(id int) (*Post, error) {
 	return &post, nil
 }
 
-func GetPostsByTitle(title string, limit, offset int) ([]Post, error) {
+func GetByTitle(title string, limit, offset int) ([]Post, error) {
 	query := "SELECT id, title, content, created_at, updated_at, deleted_at FROM posts WHERE title ILIKE $1 AND deleted_at IS NULL ORDER BY created_at DESC LIMIT $2 OFFSET $3"
 	rows, err := model.DB.Query(query, "%"+title+"%", limit, offset)
 	if err != nil {
@@ -98,7 +98,7 @@ func GetPostsByTitle(title string, limit, offset int) ([]Post, error) {
 	return posts, rows.Err()
 }
 
-func GetRecentPosts(limit int) ([]Post, error) {
+func GetRecent(limit int) ([]Post, error) {
 	query := "SELECT id, title, content, created_at, updated_at, deleted_at FROM posts WHERE deleted_at IS NULL ORDER BY created_at DESC LIMIT $1"
 	rows, err := model.DB.Query(query, limit)
 	if err != nil {

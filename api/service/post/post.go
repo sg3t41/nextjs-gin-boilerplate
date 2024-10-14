@@ -16,7 +16,7 @@ type Post struct {
 }
 
 func (p *Post) Get() (interface{}, error) {
-	gp, err := model.GetPostByID(1)
+	gp, err := model.GetByID(1)
 	if err != nil {
 		return nil, err
 	}
