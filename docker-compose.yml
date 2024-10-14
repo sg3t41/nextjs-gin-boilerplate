@@ -57,6 +57,14 @@ services:
     depends_on:
       - db
 
+  redis:
+    image: redis:alpine
+    container_name: redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis_data:/data
+
   devenv:
     build:
       context: ./devenv/
@@ -70,3 +78,4 @@ services:
 
 volumes:
   pgdata:
+  redis_data:
