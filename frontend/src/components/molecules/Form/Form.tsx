@@ -1,8 +1,7 @@
 'use client'
 
 import { signUpAction } from '@/features/signup/actions/signUpAction'
-import { useActionState } from 'react'
-import { useFormStatus } from 'react-dom'
+import { useFormState, useFormStatus } from 'react-dom'
 
 const initialState = {
   message: '',
@@ -19,7 +18,7 @@ function SubmitButton() {
 }
 
 export function Form() {
-  const [state, formAction] = useActionState(signUpAction, initialState)
+  const [state, formAction] = useFormState(signUpAction, initialState)
 
   return (
     <form action={formAction}>

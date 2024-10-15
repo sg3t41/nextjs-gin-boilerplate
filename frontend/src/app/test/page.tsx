@@ -1,9 +1,9 @@
-import { Form } from '@/components/molecules/Form/Form'
+import * as Molecules from '@/components/molecules/index'
 
 export default function TestPage() {
   return (
     <div>
-      <Form />
+      <Molecules.Form />
     </div>
   )
 }
