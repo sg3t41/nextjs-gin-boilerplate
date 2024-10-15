@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sg3t41/syomei_api/router/api/v1/posts"
 	"github.com/sg3t41/syomei_api/router/api/v1/users"
+	"net/http"
 )
 
 // InitRouter initialize routing information
@@ -15,15 +16,19 @@ func InitRouter() *gin.Engine {
 
 	// CORS設定
 	corsConfig := cors.Config{
-		AllowOrigins:     []string{"*", "http://localhost:3000", "http://frontend:3000"}, // すべてのオリジンを許可
-		AllowMethods:     []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},            // 許可するHTTPメソッド
-		AllowHeaders:     []string{"Origin", "Content-Type", "Authorization"},            // 許可するヘッダー
-		ExposeHeaders:    []string{"Content-Length"},                                     // エクスポーズするヘッダー
-		AllowCredentials: true,                                                           // Cookieを使用する場合はtrueに設定
-		MaxAge:           12 * 3600,                                                      // プリフライトリクエストのキャッシュ時間
+		AllowOrigins:     []string{"http://localhost:3000"},
+		AllowMethods:     []string{"PUT", "PATCH", "GET", "POST", "OPTIONS"},
+		AllowHeaders:     []string{"Content-Type", "Origin"},
+		ExposeHeaders:    []string{"Content-Length"},
+		AllowCredentials: true,
+		MaxAge:           12 * 3600,
 	}
 
-	r.Use(cors.New(corsConfig)) // CORSミドルウェアを使用
+	r.Use(cors.New(corsConfig))
+
+	r.GET("/", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{"status": "ok"})
+	})
 
 	apiv1 := r.Group("/api/v1")
 	// apiv1.Use(jwt.JWT())
@@ -38,4 +43,3 @@ func InitRouter() *gin.Engine {
 
 	return r
 }
-
