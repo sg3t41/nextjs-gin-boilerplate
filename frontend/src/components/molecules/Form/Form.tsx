@@ -2,6 +2,7 @@
 
 import { signUpAction } from '@/features/signup/actions/signUpAction'
 import { useFormState, useFormStatus } from 'react-dom'
+import * as Molecule from '@/components/molecules/index'
 
 const initialState = {
   username: '',
@@ -20,7 +21,7 @@ function SubmitButton() {
 
   return (
     <button type='submit' aria-disabled={pending}>
-      Add
+      送信
     </button>
   )
 }
@@ -30,41 +31,32 @@ export function Form() {
 
   return (
     <form action={formAction} noValidate>
-      <label htmlFor='username'>Username</label>
-      <input type='text' id='username' name='username' required />
-      {state?.errors?.username && state.errors.username.length > 0 && (
-        <ul>
-          {state.errors.username.map((error, index) => (
-            <li key={index} className='error-message'>
-              {error}
-            </li>
-          ))}
-        </ul>
-      )}
+      <Molecule.InputField
+        label='Username'
+        type='text'
+        name='username'
+        placeholder='Enter your username'
+        value={state?.username ?? ''}
+        errors={state?.errors?.username}
+      />
 
-      <label htmlFor='email'>Email</label>
-      <input type='email' id='email' name='email' required />
-      {state?.errors?.email && state.errors.email.length > 0 && (
-        <ul>
-          {state.errors.email.map((error, index) => (
-            <li key={index} className='error-message'>
-              {error}
-            </li>
-          ))}
-        </ul>
-      )}
+      <Molecule.InputField
+        label='Email'
+        type='email'
+        name='email'
+        placeholder='Enter your email'
+        value={state?.email ?? ''}
+        errors={state?.errors?.email}
+      />
 
-      <label htmlFor='password'>Password</label>
-      <input type='password' id='password' name='password' required />
-      {state?.errors?.password && state.errors.password.length > 0 && (
-        <ul>
-          {state.errors.password.map((error, index) => (
-            <li key={index} className='error-message'>
-              {error}
-            </li>
-          ))}
-        </ul>
-      )}
+      <Molecule.InputField
+        label='Password'
+        type='password'
+        name='password'
+        placeholder='Enter your password'
+        value={state?.passwordHash ?? ''}
+        errors={state?.errors?.password}
+      />
 
       {state?.errors?.commMessage && state.errors.commMessage && (
         <p className='error-message'>{state.errors.commMessage}</p>
