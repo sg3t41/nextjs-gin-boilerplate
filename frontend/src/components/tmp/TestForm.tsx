@@ -10,9 +10,10 @@ const TestForm = <T extends U>({
   initialState,
 }: {
   action: (state: T, formData: FormData) => Promise<T>
+  // initialStateはPromise<T>も想定しているため
   initialState: Awaited<T>
 }) => {
-  const [state, dispatch] = useFormState(action, initialState)
+  const [state, dispatch] = useFormState<T, FormData>(action, initialState)
   return (
     <form action={dispatch}>
       <div>{state.count}</div>
