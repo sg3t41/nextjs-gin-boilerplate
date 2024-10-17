@@ -1,8 +1,8 @@
 'use client'
 
 import { signUpAction } from '@/features/signup/actions/signUpAction'
-import { useFormState, useFormStatus } from 'react-dom'
 import * as Molecule from '@/components/molecules/index'
+import { useActionState } from 'react'
 
 const initialState = {
   username: '',
@@ -16,21 +16,11 @@ const initialState = {
   },
 }
 
-function SubmitButton() {
-  const { pending } = useFormStatus()
-
-  return (
-    <button type='submit' aria-disabled={pending}>
-      送信
-    </button>
-  )
-}
-
 export function Form() {
-  const [state, formAction] = useFormState(signUpAction, initialState)
+  const [state, action, isPending] = useActionState(signUpAction, initialState)
 
   return (
-    <form action={formAction} noValidate>
+    <form action={action} noValidate>
       <Molecule.InputField
         label='Username'
         type='text'
@@ -62,7 +52,10 @@ export function Form() {
         <p className='error-message'>{state.errors.commMessage}</p>
       )}
 
-      <SubmitButton />
+      <button type='submit' aria-disabled={isPending}>
+        送信
+      </button>
+
       <p aria-live='polite' className='sr-only' role='status'>
         {state?.username}
         {state?.email}
