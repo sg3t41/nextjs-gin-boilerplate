@@ -1,28 +1,37 @@
 'use client'
 import { useFormState } from 'react-dom'
+import * as Molecule from '@/components/molecules'
 
-type U = {
-  count: number
-}
-
-const TestForm = <T extends U>({
+// Tのerrorsの型をRecord<keyof T, string[]>に変更
+const TestForm = <T extends { errors: Record<keyof T, string[]> }>({
   action,
   initialState,
+  inputFields,
 }: {
   action: (state: T, formData: FormData) => Promise<T>
-  // initialStateはPromise<T>も想定しているため
   initialState: Awaited<T>
+  inputFields: {
+    label: string
+    type: string
+    name: keyof T // nameをkeyof Tに変更
+    placeholder: string
+  }[]
 }) => {
   const [state, dispatch] = useFormState<T, FormData>(action, initialState)
+
   return (
     <form action={dispatch}>
-      <div>{state.count}</div>
-      <button type='submit' name='action' value='increment'>
-        Increment
-      </button>
-      <button type='submit' name='action' value='decrement'>
-        Decrement
-      </button>
+      {inputFields.map(({ label, type, name, placeholder }, index) => (
+        <Molecule.InputField
+          key={index}
+          label={label}
+          type={type}
+          name={name as string} // 型キャストは必要
+          placeholder={placeholder}
+          value={state[name as keyof T] as string} // keyof Tを使用して型安全に
+          errors={state.errors[name] || []} // state.errorsからエラーを取得
+        />
+      ))}
     </form>
   )
 }

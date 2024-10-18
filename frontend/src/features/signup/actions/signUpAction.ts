@@ -17,9 +17,9 @@ type State = {
 }
 
 export async function signUpAction(
-  _: State | undefined,
+  _: State,
   formData: FormData,
-): Promise<State | undefined> {
+): Promise<State> {
   // validation scheme
   const schema = z.object({
     username: z

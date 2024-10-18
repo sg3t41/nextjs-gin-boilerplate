@@ -1,10 +1,9 @@
-import { countAction } from '@/components/tmp/action'
-import TestForm from '@/components/tmp/TestForm'
+import { SignUpForm } from '@/features/signup/components/SignUpForm'
 
 export default function TestPage() {
   return (
     <>
-      <TestForm action={countAction} initialState={{ count: 0 }} />
+      <SignUpForm />
     </>
   )
 }

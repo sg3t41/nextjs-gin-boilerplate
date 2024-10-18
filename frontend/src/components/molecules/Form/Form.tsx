@@ -4,7 +4,19 @@ import { signUpAction } from '@/features/signup/actions/signUpAction'
 import { useFormState, useFormStatus } from 'react-dom'
 import * as Molecule from '@/components/molecules/index'
 
-const initialState = {
+type State = {
+  username: string
+  email: string
+  passwordHash: string
+  errors?: {
+    username?: string[]
+    email?: string[]
+    password?: string[]
+    commMessage?: string
+  }
+}
+
+const initialState: State = {
   username: '',
   email: '',
   passwordHash: '',
