@@ -1,6 +1,6 @@
-export type Input<T extends string> = {
+export type Input = {
   label: string
   type: string
-  name: T
+  name: string
   placeholder?: string
 }

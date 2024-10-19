@@ -1,11 +1,11 @@
+'use client'
+
 import { useFormState } from 'react-dom'
 import * as Molecule from '@/components/molecules'
+import * as Atom from '@/components/atoms'
 import * as type from '@/types'
 
-const Form = <
-  T extends type.FormState<string>,
-  U extends type.FormInput<string>,
->({
+const Form = <T extends type.FormState<string>, U extends type.FormInput>({
   action,
   initialState,
   inputs,
@@ -29,6 +29,8 @@ const Form = <
           errors={state?.errors?.[name]}
         />
       ))}
+
+      <Atom.Button text={'送信'} type={'submit'} />
     </form>
   )
 }

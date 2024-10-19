@@ -1,5 +1,5 @@
-import * as Organism from '@/components/organisms'
+import { SignUpForm } from '@/features/signup/components/SignUpForm'
 
 export default function TestPage() {
-  return <Organism.Form />
+  return <SignUpForm />
 }
