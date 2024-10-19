@@ -6,19 +6,19 @@ import * as Atom from '@/components/atoms'
 import * as type from '@/types'
 
 const Form = <T extends type.FormState<string>, U extends type.FormInput>({
-  action,
+  formAction,
   initialState,
-  inputs,
+  inputFields,
 }: {
-  action: (state: T, formData: FormData) => T | Promise<T>
+  formAction: (state: T, formData: FormData) => T | Promise<T>
   initialState: Awaited<T>
-  inputs: U[]
+  inputFields: U[]
 }) => {
-  const [state, dispatch] = useFormState(action, initialState)
+  const [state, dispatch] = useFormState(formAction, initialState)
 
   return (
     <form action={dispatch}>
-      {inputs.map(({ name, type, label, placeholder }) => (
+      {inputFields.map(({ name, type, label, placeholder }) => (
         <Molecule.InputField
           key={name}
           label={label}
