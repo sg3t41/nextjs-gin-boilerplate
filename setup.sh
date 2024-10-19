@@ -6,7 +6,7 @@ if ! [ -d devenv ]; then
 fi
 
 # コンテナをバックグラウンドで起動
-docker compose up -d --build
+docker compose up -d
 
 # 開発作業用コンテナに入る
 docker compose exec -it devenv bash

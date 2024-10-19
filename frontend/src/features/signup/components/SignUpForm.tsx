@@ -1,54 +1,35 @@
 // SignUpFormの定義
-import TestForm from '@/components/tmp/TestForm'
 import { signUpAction } from '../actions/signUpAction'
+import type { SignUpFormState } from '../types/SignUpFormState.type'
+import * as Organism from '@/components/organisms'
+import type { SignUpInputs } from '../types/SignUpInputs.type'
 
-// errorsの型をRecord<string, string[]>に変更
-type Errors = Record<keyof State, string[]>
-
-const initialState: State = {
-  username: '',
-  email: '',
-  password: '', // passwordHashからpasswordに変更
-  errors: {
-    username: [],
-    email: [],
-    password: [],
+const inputFields: SignUpInputs = [
+  {
+    label: 'Username',
+    type: 'text',
+    name: 'username',
+    placeholder: 'Enter your username',
   },
-  message: '',
-}
+  {
+    label: 'Email',
+    type: 'email',
+    name: 'email',
+    placeholder: 'Enter your email',
+  },
+  {
+    label: 'Password',
+    type: 'password',
+    name: 'password',
+    placeholder: 'Enter your password',
+  },
+]
 
-type State = {
-  username: string
-  email: string
-  password: string // passwordHashではなくpassword
-  errors: Errors // ここをErrors型に変更
-  message?: string
-}
+const initialState: SignUpFormState = { username: '', email: '', password: '' }
 
 export const SignUpForm = () => {
-  const inputFields = [
-    {
-      label: 'Username',
-      type: 'text',
-      name: 'username', // これはStateのプロパティ名と一致
-      placeholder: 'Enter your username',
-    },
-    {
-      label: 'Email',
-      type: 'email',
-      name: 'email', // これはStateのプロパティ名と一致
-      placeholder: 'Enter your email',
-    },
-    {
-      label: 'Password',
-      type: 'password',
-      name: 'password', // nameをpasswordに変更
-      placeholder: 'Enter your password',
-    },
-  ]
-
   return (
-    <TestForm<State>
+    <Organism.Form<SignUpFormState, SignUpInputs>
       action={signUpAction}
       initialState={initialState}
       inputFields={inputFields}

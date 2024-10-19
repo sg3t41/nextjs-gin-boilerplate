@@ -3,23 +3,12 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import * as utils from '@/utils/index'
-
-type State = {
-  username: string
-  email: string
-  passwordHash: string
-  errors?: {
-    username?: string[]
-    email?: string[]
-    password?: string[]
-    commMessage?: string
-  }
-}
+import type { SignUpState } from '../types/FormType.type'
 
 export async function signUpAction(
-  _: State,
+  _: SignUpState,
   formData: FormData,
-): Promise<State> {
+): Promise<SignUpState> {
   // validation scheme
   const schema = z.object({
     username: z
@@ -54,7 +43,7 @@ export async function signUpAction(
     return {
       username: '',
       email: '',
-      passwordHash: '',
+      password: '',
       errors: validatedFields.error.flatten().fieldErrors,
     }
   }
@@ -69,15 +58,15 @@ export async function signUpAction(
     return {
       username,
       email,
-      passwordHash: utils.sha256.hash(password),
+      password: utils.sha256.hash(password),
     }
   } catch (e) {
     console.log(e)
     return {
       username: '',
       email: '',
-      passwordHash: '',
-      errors: { commMessage: 'Failed to create todo' },
+      password: '',
+      message: 'Failed to create todo',
     }
   }
 }
