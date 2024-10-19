@@ -3,25 +3,26 @@ import { signUpAction as formAction } from '../actions/signUpAction'
 import type { SignUpFormState } from '../types/SignUpFormState.type'
 import type { SignUpFormInputField } from '../types/SignUpFormInputField.type'
 import * as Organism from '@/components/organisms'
+import { useCallback, useState } from 'react'
 
 const inputFields: Array<SignUpFormInputField> = [
   {
-    label: 'Username',
+    label: 'ユーザー名',
     type: 'text',
     name: 'username',
-    placeholder: 'Enter your username',
+    placeholder: 'ユーザー名を入力してください',
   },
   {
-    label: 'Email',
+    label: 'メールアドレス',
     type: 'email',
     name: 'email',
-    placeholder: 'Enter your email',
+    placeholder: 'メールアドレスを入力してください',
   },
   {
-    label: 'Password',
+    label: 'パスワード',
     type: 'password',
     name: 'password',
-    placeholder: 'Enter your password',
+    placeholder: 'パスワードを入力してください',
   },
 ]
 
@@ -32,6 +33,12 @@ const initialState: SignUpFormState = {
 }
 
 export const SignUpForm = () => {
+  //  const [state, update] = useState<SignUpFormState>({
+  //    username: '',
+  //    email: '',
+  //    password: '',
+  //  } as SignUpFormState) // 初期値として空の文字列をセット
+
   return (
     <Organism.Form<SignUpFormState, SignUpFormInputField>
       formAction={formAction}

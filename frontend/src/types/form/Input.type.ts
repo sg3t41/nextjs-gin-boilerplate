@@ -1,6 +1,8 @@
-export type Input = {
+export type Input<T extends string> = {
+  // fixme
+  [key: string]: any
   label: string
   type: string
-  name: string
+  name: T
   placeholder?: string
 }
