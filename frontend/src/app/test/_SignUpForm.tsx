@@ -1,10 +1,13 @@
 // SignUpFormの定義
-import { signUpAction as formAction } from '../actions/signUpAction'
-import type { SignUpFormState } from '../types/SignUpFormState.type'
-import type { SignUpFormInputField } from '../types/SignUpFormInputField.type'
-import * as Organism from '@/components/organisms'
+import _Form, { FormInput, PrimaryState } from './_Form'
+import { signUpAction } from './signUpAction'
 
-const inputFields: Array<SignUpFormInputField> = [
+// フィールド名のユニオン型
+export type SignUpFieldNames = 'username' | 'email' | 'password'
+// エラー名のユニオン型
+export type SignUpErrorNames = 'username' | 'email' | 'password'
+
+const inputFields: Array<FormInput<SignUpFieldNames>> = [
   {
     label: 'ユーザー名',
     type: 'text',
@@ -25,16 +28,16 @@ const inputFields: Array<SignUpFormInputField> = [
   },
 ]
 
-const initialState: SignUpFormState = {
+const initialState: PrimaryState<SignUpFieldNames> = {
   username: '',
   email: '',
   password: '',
 }
 
-export const SignUpForm = () => {
+export const _SignUpForm = () => {
   return (
-    <Organism.Form<SignUpFormState, SignUpFormInputField>
-      formAction={formAction}
+    <_Form<SignUpFieldNames, SignUpErrorNames>
+      formAction={signUpAction}
       initialState={initialState}
       inputFields={inputFields}
     />

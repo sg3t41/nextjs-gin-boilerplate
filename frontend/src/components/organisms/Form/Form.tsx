@@ -34,7 +34,7 @@ const Form = <
   )
 
   return (
-    <form action={dispatch}>
+    <form action={dispatch} noValidate>
       {inputFields.map(({ name, type, label, placeholder }) => (
         <Molecule.InputField
           key={name}

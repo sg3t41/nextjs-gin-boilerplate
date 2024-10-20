@@ -3,7 +3,10 @@
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import * as utils from '@/utils/index'
-import { SignUpFormState } from '../types/SignUpFormState.type'
+import { FormState } from './_Form'
+import { SignUpErrorNames, SignUpFieldNames } from './_SignUpForm'
+
+type SignUpFormState = FormState<SignUpFieldNames, SignUpErrorNames>
 
 export async function signUpAction(
   _: SignUpFormState,
@@ -15,21 +18,11 @@ export async function signUpAction(
       .string({
         invalid_type_error: 'ユーザー名が不正です。',
       })
-      .max(20, { message: 'ユーザー名が長すぎます。' })
-      .refine(value => value.trim() !== '', {
-        message: 'ユーザー名を入力してください。',
-        path: ['username'],
-      }),
-    email: z
-      .string()
-      .email({ message: 'Invalid email format' })
-      .refine(value => value.trim() !== '', {
-        message: 'メールアドレスを入力してください。',
-        path: ['email'],
-      }),
+      .min(4, { message: '最短4文字以上の長さで入力してください。' })
+      .max(25, { message: '最長25文字以下の長さで入力してください。' }),
+    email: z.string().email({ message: 'メールアドレスの形式が不正です。' }),
     password: z.string().refine(value => value.length >= 8, {
       message: 'パスワードは8文字以上で入力してください。',
-      path: ['password'],
     }),
   })
 
@@ -45,6 +38,7 @@ export async function signUpAction(
       email: '',
       password: '',
       errors: validatedFields.error.flatten().fieldErrors,
+      hasError: true,
     }
   }
 
@@ -66,7 +60,7 @@ export async function signUpAction(
       username: '',
       email: '',
       password: '',
-      message: 'Failed to create todo',
+      hasError: true,
     }
   }
 }

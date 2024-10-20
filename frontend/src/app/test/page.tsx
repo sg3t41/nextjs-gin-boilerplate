@@ -1,5 +1,5 @@
-import { SignUpForm } from '@/features/signup/components/SignUpForm'
+import { _SignUpForm } from './_SignUpForm'
 
 export default function TestPage() {
-  return <SignUpForm />
+  return <_SignUpForm />
 }
