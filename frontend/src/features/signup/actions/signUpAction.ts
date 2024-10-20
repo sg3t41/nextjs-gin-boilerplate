@@ -1,5 +1,7 @@
 'use server'
 
+import { cookies } from 'next/headers'
+import { jwtDecode } from 'jwt-decode'
 import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import * as utils from '@/utils'
@@ -64,10 +66,15 @@ export async function signUpAction(
     console.log(email)
     console.log(passwordHash)
 
-    // レスポンスからトークンを取得
     const data = await response.json()
-    const token = data.token // トークンを取得
-    console.log('Received token:', token) // トークンをログに出力
+    const token = data.token
+    console.log('Received token:', token)
+
+    cookies().set('jwttoken', token)
+
+    const decoded = jwtDecode(token)
+    console.log('デコードしました')
+    console.log(decoded)
 
     revalidatePath('/')
     return {
