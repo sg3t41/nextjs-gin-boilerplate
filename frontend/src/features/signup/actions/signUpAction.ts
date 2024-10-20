@@ -64,6 +64,11 @@ export async function signUpAction(
     console.log(email)
     console.log(passwordHash)
 
+    // レスポンスからトークンを取得
+    const data = await response.json()
+    const token = data.token // トークンを取得
+    console.log('Received token:', token) // トークンをログに出力
+
     revalidatePath('/')
     return {
       username,

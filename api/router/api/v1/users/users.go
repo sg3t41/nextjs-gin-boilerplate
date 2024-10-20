@@ -3,8 +3,10 @@ package users
 import (
 	"fmt"
 	"net/http"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sg3t41/syomei_api/pkg/util/jwt"
 	service "github.com/sg3t41/syomei_api/service/user"
 )
 
@@ -27,37 +29,37 @@ type UserInput struct {
 }
 
 func Post(c *gin.Context) {
-	fmt.Println("呼ばれたよ")
-	c.Header("Access-Control-Allow-Origin", "*")                                // すべてのオリジンを許可
-	c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS") // 許可するメソッドを設定
-	c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")     // 許可するヘッダーを設定
-	c.Status(http.StatusOK)                                                     // 200 OK を返す
 	var ui UserInput
+
 	if err := c.ShouldBindJSON(&ui); err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "Invalid input"})
 		return
 	}
+
 	sp := service.User{
 		Username:     ui.Username,
 		Email:        ui.Email,
 		PasswordHash: ui.PasswordHash,
 	}
 
-	id, err := sp.Add()
+	userID, err := sp.Add()
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "add user"})
 		return
 	}
 
-	c.JSON(http.StatusOK, gin.H{"id": id})
-}
+	// todo 存在チェック
 
-// OPTIONSメソッドのハンドラーを追加
-func Options(c *gin.Context) {
-	c.Header("Access-Control-Allow-Origin", "*")                                // すべてのオリジンを許可
-	c.Header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS") // 許可するメソッドを設定
-	c.Header("Access-Control-Allow-Headers", "Content-Type, Authorization")     // 許可するヘッダーを設定
-	c.Status(http.StatusOK)                                                     // 200 OK を返す
+	// jwtトークンの発行
+	strUserID := strconv.FormatInt(userID, 10)
+	token, err := jwt.GenerateToken(ui.Username, strUserID, ui.Email)
+	if err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusBadRequest, gin.H{"error": "error auth token"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"token": token})
 }

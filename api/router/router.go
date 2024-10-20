@@ -38,7 +38,6 @@ func InitRouter() *gin.Engine {
 
 		apiv1.GET("/users", users.Get)
 		apiv1.POST("/users", users.Post)
-		apiv1.OPTIONS("/users", users.Options)
 	}
 
 	return r
