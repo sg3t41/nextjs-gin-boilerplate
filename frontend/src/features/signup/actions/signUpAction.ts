@@ -41,9 +41,28 @@ export async function signUpAction(
 
   const { username, email, password } = validatedFields.data
   try {
+    const passwordHash = utils.sha256.hash(password)
+
+    const response = await fetch('http://syomei_api:8080/api/v1/users', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        username,
+        email,
+        password_hash: passwordHash,
+      }),
+    })
+
+    if (!response.ok) {
+      throw new Error('Failed to sign up')
+    }
+
+    console.log(response)
     console.log(username)
     console.log(email)
-    console.log(password)
+    console.log(passwordHash)
 
     revalidatePath('/')
     return {
