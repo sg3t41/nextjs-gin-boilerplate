@@ -1,4 +1,13 @@
-import type { State } from '@/types/form/State.type'
-import type { Input } from './form/Input.type'
+import type {
+  PrimaryState,
+  ErrorState,
+  FormState,
+  FormInput,
+} from './form/Form.type'
 
-export type { State as FormState, Input as FormInput }
+export type {
+  PrimaryState as PrimaryFormState,
+  ErrorState as ErrorFormState,
+  FormState,
+  FormInput,
+}
