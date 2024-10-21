@@ -73,7 +73,6 @@ export async function signUpAction(
     cookies().set('jwttoken', token)
 
     const decoded = jwtDecode(token)
-    console.log('デコードしました')
     console.log(decoded)
 
     revalidatePath('/')
