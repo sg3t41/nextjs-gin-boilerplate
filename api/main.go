@@ -8,6 +8,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/sg3t41/syomei_api/config"
 	"github.com/sg3t41/syomei_api/model"
+	"github.com/sg3t41/syomei_api/pkg/redis"
 	"github.com/sg3t41/syomei_api/pkg/util"
 	"github.com/sg3t41/syomei_api/router"
 )
@@ -16,6 +17,7 @@ func init() {
 	config.Setup()
 	util.Setup()
 	model.Setup()
+	redis.SetUp()
 }
 
 func main() {

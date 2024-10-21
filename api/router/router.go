@@ -1,11 +1,13 @@
 package routers
 
 import (
+	"net/http"
+
 	"github.com/gin-contrib/cors" // CORSパッケージのインポート
 	"github.com/gin-gonic/gin"
+	"github.com/sg3t41/syomei_api/pkg/redis"
 	"github.com/sg3t41/syomei_api/router/api/v1/posts"
 	"github.com/sg3t41/syomei_api/router/api/v1/users"
-	"net/http"
 )
 
 // InitRouter initialize routing information
@@ -27,6 +29,8 @@ func InitRouter() *gin.Engine {
 	r.Use(cors.New(corsConfig))
 
 	r.GET("/", func(c *gin.Context) {
+		redis.Set(c, "name", "john")
+		redis.Get(c, "name")
 		c.JSON(http.StatusOK, gin.H{"status": "ok"})
 	})
 

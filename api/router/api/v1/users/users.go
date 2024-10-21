@@ -61,5 +61,7 @@ func Post(c *gin.Context) {
 		return
 	}
 
+	// Redis
+
 	c.JSON(http.StatusOK, gin.H{"token": token})
 }
