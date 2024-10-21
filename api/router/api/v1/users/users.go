@@ -6,6 +6,7 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
+	"github.com/sg3t41/syomei_api/pkg/redis"
 	"github.com/sg3t41/syomei_api/pkg/util/jwt"
 	service "github.com/sg3t41/syomei_api/service/user"
 )
@@ -62,6 +63,26 @@ func Post(c *gin.Context) {
 	}
 
 	// Redis
+	// Redisにユーザー情報を保存
+	userKey := "user:" + strUserID
+	userData := map[string]interface{}{
+		"username":      ui.Username,
+		"email":         ui.Email,
+		"password_hash": ui.PasswordHash,
+	}
+
+	if err := redis.HSet(c, userKey, userData); err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not save user to Redis"})
+		return
+	}
+
+	// トークンをRedisに保存（オプション）
+	if err := redis.Set(c, "token:"+token, strUserID); err != nil {
+		fmt.Println(err)
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not save token to Redis"})
+		return
+	}
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
 }
