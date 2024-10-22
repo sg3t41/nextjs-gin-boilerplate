@@ -3,29 +3,36 @@ package jwt
 import (
 	"time"
 
+	// TODO: github.com/golang-jwt/jwt にする
 	"github.com/dgrijalva/jwt-go"
 	"github.com/sg3t41/syomei_api/pkg/util"
-	"github.com/sg3t41/syomei_api/pkg/util/md5"
+	_ "github.com/sg3t41/syomei_api/pkg/util/md5"
 )
 
 type Claims struct {
-	UserID   string `json:"user_id"`
-	Password string `json:"password"`
+	UserID string `json:"user_id"`
+	// Password string `json:"password"`
 	Email    string `json:"email"`
+	Username string `json:"username"`
 	jwt.StandardClaims
 }
 
 // GenerateToken generate tokens used for auth
 func GenerateToken(username, userID, email string) (string, error) {
 	nowTime := time.Now()
-	expireTime := nowTime.Add(3 * time.Hour)
+	// fix
+	expireTime := nowTime.Add(9999 * time.Hour)
 
 	claims := Claims{
 		// fixme パラメータの選定
-		md5.Encode(username),
-		md5.Encode(userID),
-		md5.Encode(email),
-		jwt.StandardClaims{
+		UserID:   userID,
+		Username: username,
+		Email:    email,
+		// md5.Encode(username),
+		// md5.Encode(userID),
+		// md5.Encode(email),
+
+		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
 			Issuer:    "syomeiapp-tmp",
 		},

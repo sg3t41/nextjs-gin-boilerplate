@@ -66,9 +66,10 @@ func Post(c *gin.Context) {
 	// Redisにユーザー情報を保存
 	userKey := "user:" + strUserID
 	userData := map[string]interface{}{
-		"username":      ui.Username,
-		"email":         ui.Email,
-		"password_hash": ui.PasswordHash,
+		"userID":   strUserID,
+		"username": ui.Username,
+		"email":    ui.Email,
+		//		"password_hash": ui.PasswordHash,
 	}
 
 	if err := redis.HSet(c, userKey, userData); err != nil {
