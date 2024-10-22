@@ -1,11 +1,9 @@
 'use server'
 
-import { cookies } from 'next/headers'
-import { jwtDecode } from 'jwt-decode'
-import { revalidatePath } from 'next/cache'
 import { z } from 'zod'
 import * as utils from '@/utils'
 import { SignUpFormState } from '../types/SignUp.type'
+import { redirect } from 'next/navigation'
 
 export async function signUpAction(
   _: SignUpFormState,
@@ -41,8 +39,8 @@ export async function signUpAction(
     }
   }
 
-  const { username, email, password } = validatedFields.data
   try {
+    const { username, email, password } = validatedFields.data
     const passwordHash = utils.sha256.hash(password)
 
     const response = await fetch('http://syomei_api:8080/api/v1/users', {
@@ -61,26 +59,11 @@ export async function signUpAction(
       throw new Error('Failed to sign up')
     }
 
-    console.log(response)
-    console.log(username)
-    console.log(email)
-    console.log(passwordHash)
-
-    const data = await response.json()
-    const token = data.token
-    console.log('Received token:', token)
-
-    cookies().set('jwttoken', token)
-
-    const decoded = jwtDecode(token)
-    console.log(decoded)
-
-    revalidatePath('/')
-    return {
-      username,
-      email,
-      password: utils.sha256.hash(password),
-    }
+    //    return {
+    //      username,
+    //      email,
+    //      password: utils.sha256.hash(password),
+    //    }
   } catch (e) {
     console.log(e)
     return {
@@ -90,4 +73,6 @@ export async function signUpAction(
       hasError: true,
     }
   }
+
+  redirect('/signin')
 }

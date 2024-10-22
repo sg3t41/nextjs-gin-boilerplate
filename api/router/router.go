@@ -5,6 +5,7 @@ import (
 
 	"github.com/gin-contrib/cors" // CORSパッケージのインポート
 	"github.com/gin-gonic/gin"
+	"github.com/sg3t41/syomei_api/middleware"
 	"github.com/sg3t41/syomei_api/pkg/redis"
 	"github.com/sg3t41/syomei_api/router/api/v1/posts"
 	"github.com/sg3t41/syomei_api/router/api/v1/users"
@@ -36,7 +37,7 @@ func InitRouter() *gin.Engine {
 	})
 
 	apiv1 := r.Group("/api/v1")
-	// apiv1.Use(jwt.JWT())
+	apiv1.Use(middleware.JWT())
 	{
 		apiv1.GET("/posts", posts.Get)
 		apiv1.POST("/posts", posts.Post)
