@@ -1,6 +1,9 @@
 package user
 
 import (
+	"fmt"
+	"strconv"
+
 	model "github.com/sg3t41/syomei_api/model/user"
 )
 
@@ -11,8 +14,19 @@ type User struct {
 	PasswordHash string
 }
 
-func (u *User) Get() (interface{}, error) {
-	return nil, nil
+func (u *User) GetByEmailAndPassword() (*User, error) {
+	record, err := model.GetUserByEmailAndPassword(u.Email, u.PasswordHash)
+	if err != nil {
+		return nil, fmt.Errorf("GetUser: %v", err)
+	}
+
+	return &User{
+		ID:           strconv.Itoa(record.ID),
+		Username:     record.Username,
+		Email:        record.Email,
+		PasswordHash: record.PasswordHash,
+	}, nil
+
 }
 
 func (u *User) Add() (int64, error) {

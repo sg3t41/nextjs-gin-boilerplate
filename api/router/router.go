@@ -8,6 +8,7 @@ import (
 	"github.com/sg3t41/syomei_api/pkg/redis"
 	"github.com/sg3t41/syomei_api/router/api/v1/posts"
 	"github.com/sg3t41/syomei_api/router/api/v1/users"
+	"github.com/sg3t41/syomei_api/router/api/v1/users/login"
 )
 
 // InitRouter initialize routing information
@@ -42,6 +43,8 @@ func InitRouter() *gin.Engine {
 
 		apiv1.GET("/users", users.Get)
 		apiv1.POST("/users", users.Post)
+
+		apiv1.POST("/users/login", login.Post)
 	}
 
 	return r

@@ -1,6 +1,7 @@
 package user
 
 import (
+	"database/sql"
 	"fmt"
 
 	"github.com/sg3t41/syomei_api/model"
@@ -41,4 +42,21 @@ func SoftDelete(id int) (int64, error) {
 		return 0, fmt.Errorf("SoftDeleteUser: %v", err)
 	}
 	return rows, nil
+}
+
+// GetUserByEmailAndPassword : メールアドレスとパスワードハッシュに基づいてユーザーを取得する関数
+func GetUserByEmailAndPassword(email, passwordHash string) (*User, error) {
+	query := "SELECT id, created_at, updated_at, deleted_at, username, email, password_hash FROM users WHERE email = $1 AND password_hash = $2"
+	row := model.DB.QueryRow(query, email, passwordHash)
+
+	var user User
+	err := row.Scan(&user.ID, &user.CreatedAt, &user.UpdatedAt, &user.DeletedAt, &user.Username, &user.Email, &user.PasswordHash)
+	if err != nil {
+		if err == sql.ErrNoRows {
+			return nil, fmt.Errorf("GetUserByEmailAndPassword: user not found")
+		}
+		return nil, fmt.Errorf("GetUserByEmailAndPassword: %v", err)
+	}
+
+	return &user, nil
 }

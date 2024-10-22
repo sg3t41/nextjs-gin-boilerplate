@@ -1,9 +1,8 @@
-package users
+package login
 
 import (
 	"fmt"
 	"net/http"
-	"strconv"
 
 	"github.com/gin-gonic/gin"
 	"github.com/sg3t41/syomei_api/pkg/redis"
@@ -11,13 +10,8 @@ import (
 	service "github.com/sg3t41/syomei_api/service/user"
 )
 
-func Get(c *gin.Context) {
-	c.JSON(http.StatusOK, "tmp")
-}
-
 type UserInput struct {
-	Username string `json:"username"`
-	Email    string `json:"email"`
+	Email string `json:"email"`
 	// クライアント側でSHA256×1されたもの
 	PasswordHash string `json:"password_hash"`
 }
@@ -32,23 +26,24 @@ func Post(c *gin.Context) {
 	}
 
 	sp := service.User{
-		Username:     ui.Username,
 		Email:        ui.Email,
 		PasswordHash: ui.PasswordHash,
 	}
 
-	userID, err := sp.Add()
+	user, err := sp.GetByEmailAndPassword()
 	if err != nil {
 		fmt.Println(err)
-		c.JSON(http.StatusBadRequest, gin.H{"error": "add user"})
+		// ユーザーが見つからなかった場合のメッセージ
+		//		if err.Error() == "GetUserByEmailAndPassword: user not found" {
+		//			c.JSON(http.StatusUnauthorized, gin.H{"message": "ユーザーが見つかりませんでした。メールアドレスまたはパスワードが正しいか確認してください。"})
+		//			return
+		//		}
+		c.JSON(http.StatusUnauthorized, gin.H{"message": "ユーザーが見つかりませんでした。メールアドレスまたはパスワードが正しいか確認してください。"})
 		return
 	}
 
-	// todo 存在チェック
-
 	// jwtトークンの発行
-	strUserID := strconv.FormatInt(userID, 10)
-	token, err := jwt.GenerateToken(ui.Username, strUserID, ui.Email)
+	token, err := jwt.GenerateToken(user.Username, user.ID, ui.Email)
 	if err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusBadRequest, gin.H{"error": "error auth token"})
@@ -57,11 +52,11 @@ func Post(c *gin.Context) {
 
 	// Redis
 	// Redisにユーザー情報を保存
-	userKey := "user:" + strUserID
+	userKey := "user:" + user.ID
 	userData := map[string]interface{}{
-		"userID":   strUserID,
-		"username": ui.Username,
-		"email":    ui.Email,
+		"userID":   user.ID,
+		"username": user.Username,
+		"email":    user.Email,
 		//		"password_hash": ui.PasswordHash,
 	}
 
@@ -72,11 +67,14 @@ func Post(c *gin.Context) {
 	}
 
 	// トークンをRedisに保存（オプション）
-	if err := redis.Set(c, "token:"+token, strUserID); err != nil {
+	if err := redis.Set(c, "token:"+token, user.ID); err != nil {
 		fmt.Println(err)
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "Could not save token to Redis"})
 		return
 	}
+
+	fmt.Println("[debug]ログイン")
+	fmt.Println(user)
 
 	c.JSON(http.StatusOK, gin.H{"token": token})
 }

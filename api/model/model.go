@@ -85,3 +85,28 @@ func SoftDeleteRecord(query string, args ...interface{}) (int64, error) {
 	}
 	return result.RowsAffected()
 }
+
+func GetRecords(table string, condition string, args ...interface{}) ([]Model, error) {
+	query := fmt.Sprintf("SELECT id, created_at, updated_at, deleted_at FROM %s WHERE %s", table, condition)
+
+	rows, err := DB.Query(query, args...)
+	if err != nil {
+		return nil, fmt.Errorf("GetRecords: %v", err)
+	}
+	defer rows.Close()
+
+	var records []Model
+	for rows.Next() {
+		var record Model
+		if err := rows.Scan(&record.ID, &record.CreatedAt, &record.UpdatedAt, &record.DeletedAt); err != nil {
+			return nil, fmt.Errorf("GetRecords Scan: %v", err)
+		}
+		records = append(records, record)
+	}
+
+	if err := rows.Err(); err != nil {
+		return nil, fmt.Errorf("GetRecords Rows Err: %v", err)
+	}
+
+	return records, nil
+}

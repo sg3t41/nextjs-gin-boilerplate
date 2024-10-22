@@ -38,7 +38,7 @@ export async function signInAction(
   try {
     const passwordHash = utils.sha256.hash(password)
 
-    const response = await fetch('http://syomei_api:8080/api/v1/users', {
+    const response = await fetch('http://syomei_api:8080/api/v1/users/login', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
