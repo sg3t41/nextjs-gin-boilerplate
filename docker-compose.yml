@@ -12,18 +12,18 @@ services:
       - env_var=env_value
     command: sh -c "npm install && npm run dev"
 
-  storybook:
-    build:
-      context: ./frontend/
-      dockerfile: Dockerfile
-    container_name: syomei_storybook
-    ports:
-      - "6006:6006"
-    volumes:
-      - "./frontend/:/workspace/"
-    environment:
-      - env_var=env_value
-    command: sh -c "npm install && npm run storybook -- --ci"
+    #  storybook:
+    #    build:
+    #      context: ./frontend/
+    #      dockerfile: Dockerfile
+    #    container_name: syomei_storybook
+    #    ports:
+    #      - "6006:6006"
+    #    volumes:
+    #      - "./frontend/:/workspace/"
+    #    environment:
+    #      - env_var=env_value
+    #    command: sh -c "npm install && npm run storybook -- --ci"
 
   api:
     build:
