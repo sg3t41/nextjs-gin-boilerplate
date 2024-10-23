@@ -7,8 +7,9 @@ type CustomJwtPayload = {
   user_id: string
 } & JwtPayload
 
-const Header = () => {
-  const jwtToken = cookies().get('jwttoken')?.value
+const Header = async () => {
+  const cookieStore = await cookies()
+  const jwtToken = cookieStore.get('jwttoken')?.value
   const currentUserInfo = jwtToken
     ? jwtDecode<CustomJwtPayload>(jwtToken)
     : undefined

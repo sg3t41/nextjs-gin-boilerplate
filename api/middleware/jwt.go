@@ -1,6 +1,7 @@
 package middleware
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/dgrijalva/jwt-go"
@@ -32,6 +33,7 @@ func JWT() gin.HandlerFunc {
 		}
 
 		if code != e.SUCCESS {
+			fmt.Println("トークン検証結果：fail")
 			c.JSON(http.StatusUnauthorized, gin.H{
 				"code": code,
 				"msg":  e.GetMsg(code),

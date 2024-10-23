@@ -5,7 +5,6 @@ import (
 
 	"github.com/gin-contrib/cors" // CORSパッケージのインポート
 	"github.com/gin-gonic/gin"
-	"github.com/sg3t41/syomei_api/middleware"
 	"github.com/sg3t41/syomei_api/pkg/redis"
 	"github.com/sg3t41/syomei_api/router/api/v1/posts"
 	"github.com/sg3t41/syomei_api/router/api/v1/users"
