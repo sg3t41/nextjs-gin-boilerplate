@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	model "github.com/sg3t41/syomei_api/model/user"
+	model "github.com/sg3t41/api/model/user"
 )
 
 type User struct {

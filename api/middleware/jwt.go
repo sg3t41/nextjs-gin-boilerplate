@@ -6,8 +6,8 @@ import (
 
 	"github.com/dgrijalva/jwt-go"
 	"github.com/gin-gonic/gin"
-	"github.com/sg3t41/syomei_api/pkg/e"
-	jwt_helper "github.com/sg3t41/syomei_api/pkg/util/jwt"
+	"github.com/sg3t41/api/pkg/e"
+	jwt_helper "github.com/sg3t41/api/pkg/util/jwt"
 )
 
 // JWT is jwt middleware

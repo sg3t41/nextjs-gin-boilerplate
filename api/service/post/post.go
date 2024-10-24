@@ -1,7 +1,7 @@
 package post
 
 import (
-	model "github.com/sg3t41/syomei_api/model/post"
+	model "github.com/sg3t41/api/model/post"
 )
 
 type Post struct {

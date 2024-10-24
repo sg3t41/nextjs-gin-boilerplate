@@ -5,8 +5,8 @@ import (
 
 	// TODO: github.com/golang-jwt/jwt にする
 	"github.com/dgrijalva/jwt-go"
-	"github.com/sg3t41/syomei_api/pkg/util"
-	_ "github.com/sg3t41/syomei_api/pkg/util/md5"
+	"github.com/sg3t41/api/pkg/util"
+	_ "github.com/sg3t41/api/pkg/util/md5"
 )
 
 type Claims struct {
@@ -34,7 +34,7 @@ func GenerateToken(username, userID, email string) (string, error) {
 
 		StandardClaims: jwt.StandardClaims{
 			ExpiresAt: expireTime.Unix(),
-			Issuer:    "syomeiapp-tmp",
+			Issuer:    "fixme",
 		},
 	}
 

@@ -5,7 +5,7 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	service "github.com/sg3t41/syomei_api/service/post"
+	service "github.com/sg3t41/api/service/post"
 )
 
 func Get(c *gin.Context) {

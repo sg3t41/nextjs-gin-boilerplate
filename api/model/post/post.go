@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"log"
 
-	"github.com/sg3t41/syomei_api/model"
+	"github.com/sg3t41/api/model"
 )
 
 type Post struct {

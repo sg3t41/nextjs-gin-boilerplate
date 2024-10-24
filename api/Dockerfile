@@ -1,8 +1,8 @@
 FROM golang:latest
 
-WORKDIR $GOPATH/src/github.com/sg3t41/syomei_api
+WORKDIR $GOPATH/src/github.com/sg3t41/api
 
-COPY . $GOPATH/src/github.com/sg3t41/syomei_api 
+COPY . $GOPATH/src/github.com/sg3t41/api 
 
 # airをインストール
 RUN go install github.com/air-verse/air@latest

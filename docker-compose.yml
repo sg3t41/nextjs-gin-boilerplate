@@ -3,7 +3,7 @@ services:
     build:
       context: ./frontend/
       dockerfile: Dockerfile
-    container_name: syomei_frontend
+    container_name: frontend
     ports:
       - "3000:3000"
     volumes:
@@ -16,7 +16,7 @@ services:
     #    build:
     #      context: ./frontend/
     #      dockerfile: Dockerfile
-    #    container_name: syomei_storybook
+    #    container_name: storybook
     #    ports:
     #      - "6006:6006"
     #    volumes:
@@ -29,18 +29,18 @@ services:
     build:
       context: ./api/
       dockerfile: Dockerfile
-    container_name: syomei_api
+    container_name: api
     ports:
       - "8080:8080"
     volumes:
-      - "./api/:/go/src/github.com/sg3t41/syomei_api"
+      - "./api/:/go/src/github.com/sg3t41/api"
     command: sh -c "air"
 
-  db:
+  postgres:
     build:
       context: ./db/
       dockerfile: Dockerfile
-    container_name: syomei_db
+    container_name: postgres
     ports:
       - "5432:5432"
     volumes:

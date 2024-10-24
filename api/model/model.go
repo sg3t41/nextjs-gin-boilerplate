@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/sg3t41/syomei_api/config"
+	"github.com/sg3t41/api/config"
 )
 
 var DB *sql.DB

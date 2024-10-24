@@ -1,6 +1,6 @@
 package util
 
-import "github.com/sg3t41/syomei_api/config"
+import "github.com/sg3t41/api/config"
 
 var JwtSecret []byte
 

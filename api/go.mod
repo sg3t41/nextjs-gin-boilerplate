@@ -1,4 +1,4 @@
-module github.com/sg3t41/syomei_api
+module github.com/sg3t41/api
 
 go 1.23.2
 

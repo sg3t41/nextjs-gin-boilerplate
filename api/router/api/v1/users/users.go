@@ -6,9 +6,9 @@ import (
 	"strconv"
 
 	"github.com/gin-gonic/gin"
-	"github.com/sg3t41/syomei_api/pkg/redis"
-	"github.com/sg3t41/syomei_api/pkg/util/jwt"
-	service "github.com/sg3t41/syomei_api/service/user"
+	"github.com/sg3t41/api/pkg/redis"
+	"github.com/sg3t41/api/pkg/util/jwt"
+	service "github.com/sg3t41/api/service/user"
 )
 
 func Get(c *gin.Context) {

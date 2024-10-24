@@ -3,7 +3,7 @@ package redis
 import (
 	"github.com/gin-gonic/gin"
 	"github.com/redis/go-redis/v9"
-	"github.com/sg3t41/syomei_api/config"
+	"github.com/sg3t41/api/config"
 )
 
 var rdb *redis.Client
@@ -107,4 +107,3 @@ func IsExists(c *gin.Context, key string) (bool, error) {
 	}
 	return true, nil // キーが存在する
 }
-
