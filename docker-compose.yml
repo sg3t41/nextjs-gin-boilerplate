@@ -38,7 +38,7 @@ services:
 
   postgres:
     build:
-      context: ./db/
+      context: ./postgres/
       dockerfile: Dockerfile
     container_name: postgres
     ports:
@@ -55,7 +55,7 @@ services:
       PGADMIN_DEFAULT_EMAIL: "sg3t41@example.com"
       PGADMIN_DEFAULT_PASSWORD: "password"
     depends_on:
-      - db
+      - postgres
 
   redis:
     image: redis:alpine
